@@ -1,0 +1,4 @@
+data
+.DS_Store
+train_test_loss.jpg
+models/model.pth
