@@ -7,6 +7,7 @@ import numpy as np
 import os
 from unicodedata import name
 import config
+from playsound import playsound
 from vae import VAE
 import torch
 import matplotlib.pyplot  as plt
@@ -45,9 +46,10 @@ def padding(signal):
 
 def tosignal(output):
     denorm = config.SCALER.inverse_transform(output)
+    denorm = librosa.feature.delta(denorm, order=1)
     denorm = denorm.T
-    denorm = librosa.db_to_amplitude(denorm)
-    signal = librosa.feature.inverse.mfcc_to_audio(denorm, hop_length=config.HOP_LENGTH)
+    signal = librosa.feature.inverse.mfcc_to_mel(denorm)
+    signal = librosa.feature.inverse.mel_to_audio(denorm)
     return signal
 
 def test_results():
@@ -56,12 +58,13 @@ def test_results():
     vae.load_state_dict(checkpoint["model_state_dict"])
     vae.eval()
     df = pd.read_csv(config.CSV_FILE_PATH)
-    path = os.path.join(config.AUDIO_FILES_PATH,"fold"+str(df["fold"].iloc[500])+"/"+df["slice_file_name"].iloc[500])
+    path = os.path.join(config.AUDIO_FILES_PATH,"fold"+str(df["fold"].iloc[550])+"/"+df["slice_file_name"].iloc[550])
+    playsound(path)
     orgsignal,sr = librosa.load(path)
     signal = padding(orgsignal)
     signal = librosa.feature.mfcc(y = signal, sr = sr,n_mfcc= config.N_MFCC , n_fft = config.N_FFT, hop_length =config.HOP_LENGTH)
     signal = signal.T
-    signal = librosa.amplitude_to_db(signal)
+    signal = librosa.feature.delta(signal, order=2)
     normalized_signal = config.SCALER.fit_transform(signal)
     normalized_signal = torch.tensor(normalized_signal).unsqueeze(0).unsqueeze(0)
     mu, var, ind1, x1,  ind2, x2, ind3, x3 = vae.encoder(normalized_signal)

@@ -85,7 +85,7 @@ class preprocessing:
             #signal = np.mean(signal, axis=0, keepdims=True)
             #signal = librosa.amplitude_to_db(signal)
             #signal = librosa.power_to_db(signal)
-            signal = self._normalize(signal_order2,idx)
+            signal = self._normalize(signal_order1,idx)
             x.append(signal)
             y.append(word2index[label])
         return {"features": x, "label": y}

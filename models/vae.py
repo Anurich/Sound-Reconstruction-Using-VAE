@@ -68,7 +68,7 @@ class Encoder(nn.ModuleList):
         x3 = x.size()
         x, indices3 = self.pool2(x)
         x = self.batchnorm3(x)
- 
+        #print(x.shape)
         # getting mean & variance 
         x = self.flatten(x)
         mu = self.mu(x)

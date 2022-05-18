@@ -55,7 +55,7 @@ if __name__ == "__main__":
 
     # define the optimizer
     vae = VAE(config.LATENT_SPACE)
-    optimizer = torch.optim.SGD(vae.parameters(), lr= config.LR, momentum= 0.9)
+    optimizer = torch.optim.SGD(vae.parameters(), lr= config.LR,momentum= 0.9)
     train_loss = []
     test_loss  = []
     for epoch in tqdm(range(config.ITERATION)):
