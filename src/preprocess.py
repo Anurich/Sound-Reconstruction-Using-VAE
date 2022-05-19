@@ -80,12 +80,9 @@ class preprocessing:
             signal = self._padding(signal)
             signal = librosa.feature.mfcc(y = signal, sr = sr, n_mfcc= config.N_MFCC , n_fft = config.N_FFT, hop_length =config.HOP_LENGTH)
             signal = signal.T
-            signal_order1 = librosa.feature.delta(signal, order=1)
             signal_order2 = librosa.feature.delta(signal, order=2)
-            #signal = np.mean(signal, axis=0, keepdims=True)
-            #signal = librosa.amplitude_to_db(signal)
-            #signal = librosa.power_to_db(signal)
-            signal = self._normalize(signal_order1,idx)
+
+            signal = self._normalize(signal_order2,idx)
             x.append(signal)
             y.append(word2index[label])
         return {"features": x, "label": y}

@@ -14,7 +14,7 @@ class reshapeModule(nn.ModuleList):
         super().__init__()
 
     def forward(self, x):
-        return x.view(-1, 128, 5,1)
+        return x.view(-1, 128, 10,1)
 
 class Encoder(nn.ModuleList):
     def __init__(self, latendim) -> None:
@@ -33,13 +33,13 @@ class Encoder(nn.ModuleList):
         self.conv3 = nn.Conv2d(in_channels=64, out_channels=128, kernel_size=3, padding=1)
         self.pool2 = nn.MaxPool2d(kernel_size=2, stride=2, padding=0, return_indices=True)
         self.batchnorm3 = nn.BatchNorm2d(num_features=128)
-
+        
         self.flatten = nn.Flatten()
         self.dropout = nn.Dropout(0.5)
 
         # defining mu and variance 
-        self.mu = nn.Linear(in_features= 640 , out_features= latendim)
-        self.var = nn.Linear(in_features= 640 , out_features= latendim)
+        self.mu = nn.Linear(in_features= 1280 , out_features= latendim)
+        self.var = nn.Linear(in_features= 1280 , out_features= latendim)
         # sampling e value from normal distribution 
 
 
@@ -89,7 +89,7 @@ class representation(nn.ModuleList):
 class Decoder(nn.ModuleList):
     def __init__(self, latenvector):
         super().__init__()
-        self.linear = nn.Linear(in_features=latenvector, out_features=640 )
+        self.linear = nn.Linear(in_features=latenvector, out_features=1280 )
         self.reshape = reshapeModule()
         self.deconv1 = nn.Sequential(
             nn.ConvTranspose2d(in_channels=128, out_channels=64, kernel_size=3, padding=1),
@@ -157,6 +157,7 @@ class VAE(nn.ModuleList):
         mu, var, ind1, x1,  ind2, x2, ind3, x3 = self.encoder(input)
         z  = self.bottleneck(mu, var,self.normal_distribution)
         decoder_output  = self.decoder(z, ind1, x1,  ind2, x2,  ind3, x3)
+        
         return torch.sigmoid(decoder_output), z, mu, var 
 
 

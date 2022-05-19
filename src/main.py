@@ -35,7 +35,7 @@ def loss(output, input, mean, log_var):
     """
     reconLoss = nn.MSELoss(reduction='none')
     kl = -0.5 * torch.sum(1 + log_var - mean**2 - torch.exp(log_var), axis=1)
-    recon = reconLoss(x, output).view(config.BATCH_SIZE, -1).sum(axis=1)
+    recon = reconLoss(input, output).view(config.BATCH_SIZE, -1).sum(axis=1)
     loss_val = recon.mean() + kl.mean()
     return loss_val
 
@@ -50,12 +50,12 @@ if __name__ == "__main__":
     traindataset = dataset(traindata)
     testdataset  = dataset(testdata)
     # now we can pass the dataset inside the data loader
-    traindataloader =  DataLoader(traindataset, batch_size=config.BATCH_SIZE, shuffle=True)
-    testdataloader  =  DataLoader(testdataset, batch_size=config.BATCH_SIZE, shuffle=True)
+    traindataloader =  DataLoader(traindataset, batch_size=config.BATCH_SIZE, shuffle=True, drop_last=True)
+    testdataloader  =  DataLoader(testdataset, batch_size=config.BATCH_SIZE, shuffle=True, drop_last=True)
 
     # define the optimizer
     vae = VAE(config.LATENT_SPACE)
-    optimizer = torch.optim.SGD(vae.parameters(), lr= config.LR,momentum= 0.9)
+    optimizer = torch.optim.SGD(vae.parameters(), lr= config.LR)
     train_loss = []
     test_loss  = []
     for epoch in tqdm(range(config.ITERATION)):
@@ -64,11 +64,12 @@ if __name__ == "__main__":
         for data in traindataloader:
             x, _ = data
           
-            optimizer.zero_grad()
+            
             output,  z, mean, log_var = vae(x)
             lossfn = loss(output, x, mean, log_var)
             lossfn.backward()
             optimizer.step()
+            optimizer.zero_grad()
             total_loss.append(lossfn.item())
     
         if epoch % 5 == 0 and epoch !=0:
