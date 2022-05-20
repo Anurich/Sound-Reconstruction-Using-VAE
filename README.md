@@ -4,8 +4,7 @@
 </p>  
 <p>
 <figure>
-   <img src="Screenshot 2022-05-19 at 5.15.28 PM.png" raw=true alt="Subject Pronouns" width = "500" height="400" />
-   <figcaption>VAE (taken from Geek for geeks).</figcaption>
+   <img src="Screenshot 2022-05-19 at 5.15.28 PM.png" raw=true alt="Trulli" width = "500" height="400" />
 </figure>
 </p>
 <p> As shown in the above figure VAE consist of Encoder & Decoder, The bottleneck consist of latent space distribution which is nothing but mean & variance. We sample from these distribution which is passed through Decoder to reconstruct the Input.
@@ -21,8 +20,7 @@ VAE used two type of loss first is reconstruction loss and KL divergence loss.
  </ul>
  
 
-<h3> Result: </h3>
+<h3> Result: Train/Test Loss </h3>
 <figure>
    <img src="train_test_loss.jpg" raw=true alt="Trulli" Pronouns" width = "500" height="400" />
-   <figcaption>Train/Test Loss.</figcaption>
 </figure>
