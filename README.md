@@ -23,6 +23,6 @@ VAE used two type of loss first is reconstruction loss and KL divergence loss.
 
 <h3> Result: </h3>
 <figure>
-   <img src="train_test_loss.jpg" raw=true alt="Subject Pronouns" width = "500" height="400" />
-   <figcaption>VAE (taken from Geek for geeks).</figcaption>
+   <img src="train_test_loss.jpg" raw=true alt="Trulli" Pronouns" width = "500" height="400" />
+   <figcaption>Train/Test Loss.</figcaption>
 </figure>
